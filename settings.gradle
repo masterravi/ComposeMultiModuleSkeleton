@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "JetpackSkeleton"
+include ':app'
+include ':module-common'
+include ':module-constants'
+include ':module-datastore'
+include ':module-localization'
+include ':module-network'
+include ':module-uicore'
