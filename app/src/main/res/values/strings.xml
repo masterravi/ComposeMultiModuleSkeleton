@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">JetpackSkeleton</string>
+    <string name="profile">Profile</string>
+    <string name="dashboard">Dasboard</string>
+    <string name="settings">Settings</string>
 </resources>

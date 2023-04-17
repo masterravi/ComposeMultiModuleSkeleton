@@ -4,17 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.training.skeleton.feature_dashboard.DashboardCompose
 import com.training.skeleton.navigation.NavGraph
 import com.training.skeleton.ui.theme.JetpackSkeletonTheme
+import com.training.skeleton.uiCore.BottomBar
+import com.training.skeleton.uiCore.BottomNavigationScreens
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,15 +24,30 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainContent()
+                    val navHostController= rememberNavController()
+                    val bottomNavigationItems = listOf(
+                        BottomNavigationScreens.Dashboard,
+                        BottomNavigationScreens.Profile,
+                        BottomNavigationScreens.Settings
+                    )
+                    Scaffold(
+                        topBar = {
+
+                        },
+                        bottomBar = {
+                            BottomBar(bottomNavigationItems,navHostController)
+                        }
+                    ) {
+
+                    }
+                    MainContent(navHostController)
                 }
             }
         }
     }
 
     @Composable
-    fun MainContent() {
-        var navHostController= rememberNavController()
+    fun MainContent(navHostController: NavHostController) {
         NavGraph(navController = navHostController)
     }
 
