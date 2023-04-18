@@ -13,6 +13,7 @@ import com.training.skeleton.navigation.NavGraph
 import com.training.skeleton.ui.theme.JetpackSkeletonTheme
 import com.training.skeleton.uiCore.BottomBar
 import com.training.skeleton.uiCore.BottomNavigationScreens
+import com.training.skeleton.uiCore.TopBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     )
                     Scaffold(
                         topBar = {
-
+                            TopBar()
                         },
                         bottomBar = {
                             BottomBar(bottomNavigationItems,navHostController)
