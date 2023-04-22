@@ -36,7 +36,12 @@ class MainActivity : ComponentActivity() {
                     )
                     Scaffold(
                         topBar = {
-                            TopBar(navHostController,mainActivityViewModel)
+                            TopBar(navHostController = navHostController,
+                                   mainActivityViewModel = mainActivityViewModel,
+                                    onButtonClicked = {
+                                        navHostController.popBackStack()
+                                    }
+                            )
                         },
                         bottomBar = {
                             BottomBar(bottomNavigationItems,navHostController)

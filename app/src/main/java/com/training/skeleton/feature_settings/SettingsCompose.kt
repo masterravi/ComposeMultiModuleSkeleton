@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.skeleton.MainActivityViewModel
+import com.training.skeleton.navigation.Screen
 
 @Composable
 fun SettingsCompose(
@@ -17,6 +18,10 @@ fun SettingsCompose(
     navigateToDashboard:()->Unit,
     navigateToProfile:()->Unit
 ) {
+    mainActivityViewModel.setScreenParams(
+        screen = Screen.Settings,
+        screenTitle = "Settings"
+    )
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

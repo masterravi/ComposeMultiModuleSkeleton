@@ -3,8 +3,6 @@ package com.training.skeleton.uiCore
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,7 +15,9 @@ import com.training.skeleton.navigation.Screen
 @Composable
 fun TopBar(
     navHostController: NavHostController,
-    mainActivityViewModel: MainActivityViewModel) {
+    mainActivityViewModel: MainActivityViewModel,
+    onButtonClicked: () -> Unit = {},
+) {
 
     val uiState by mainActivityViewModel.uiState.collectAsState()
 
@@ -26,32 +26,31 @@ fun TopBar(
             Text(text = uiState.currentScreenTitle)
         },
         navigationIcon = {
-//            when(uiState.currentScreen){
-//                Screen.Profile,Screen.Settings->{
-//                    IconButton(onClick = {
-//                        navHostController.popBackStack()
-//                    }) {
-//                        Icon(Icons.Filled.ArrowBack, "backIcon")
-//                    }
-//                }
-//            }
+            when(uiState.currentScreen){
+                Screen.Profile,Screen.Settings->{
+                    IconButton(onClick = {
+                        onButtonClicked()
+                    }) {
+                        Icon(Icons.Filled.ArrowBack, "backIcon")
+                    }
+                }
+                else -> {}
+            }
         },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = androidx.compose.ui.graphics.Color.White,
-        elevation = 10.dp,
-        actions = {
+        elevation = 10.dp
+//        actions = {
 //            when(uiState.currentScreen){
-//                Screen.Dashboard->{
-//                    navHostController.popBackStack()
-//                }
 //                Screen.Profile->{
 //                    navHostController.popBackStack()
 //                }
 //                Screen.Settings->{
 //                    navHostController.popBackStack()
 //                }
+//                else -> {}
 //            }
-        }
+//        }
     )
 }
 

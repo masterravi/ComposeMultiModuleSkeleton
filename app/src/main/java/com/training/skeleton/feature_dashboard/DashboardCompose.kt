@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.skeleton.MainActivityViewModel
+import com.training.skeleton.navigation.Screen
 
 @Composable
 fun DashboardCompose(
@@ -18,6 +19,10 @@ fun DashboardCompose(
     navigateToSettings:()->Unit,
 ) {
 
+    mainActivityViewModel.setScreenParams(
+        screen = Screen.Dashboard,
+        screenTitle = "Dashboard"
+    )
 
     Column(
         modifier = Modifier.fillMaxSize(),
