@@ -3,6 +3,7 @@ package com.training.skeleton
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -16,6 +17,8 @@ import com.training.skeleton.uiCore.BottomNavigationScreens
 import com.training.skeleton.uiCore.TopBar
 
 class MainActivity : ComponentActivity() {
+
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -33,7 +36,7 @@ class MainActivity : ComponentActivity() {
                     )
                     Scaffold(
                         topBar = {
-                            TopBar()
+                            TopBar(navHostController,mainActivityViewModel)
                         },
                         bottomBar = {
                             BottomBar(bottomNavigationItems,navHostController)
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainContent(navHostController: NavHostController) {
-        NavGraph(navController = navHostController)
+        NavGraph(navController = navHostController,mainActivityViewModel)
     }
 
 }

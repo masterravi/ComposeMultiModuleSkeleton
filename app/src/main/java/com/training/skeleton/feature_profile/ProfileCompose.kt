@@ -9,13 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.DashboardViewModel
 
 @Composable
 fun ProfileCompose(
+    mainActivityViewModel: MainActivityViewModel =viewModel(),
     navigateToDashboard:()->Unit,
-    navigateToSettings:()->Unit,
-    profileViewModel: ProfileViewModel = viewModel()
+    navigateToSettings:()->Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),

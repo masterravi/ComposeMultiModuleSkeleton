@@ -1,18 +1,34 @@
 package com.training.skeleton
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.training.skeleton.ui.theme.JetpackSkeletonTheme
+import com.training.skeleton.navigation.Screen
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class MainActivityViewModel : ViewModel() {
+
+    data class SharedUiState(
+        val currentScreen: Screen = Screen.Dashboard,
+        val currentScreenTitle: String = "",
+        val navCurrentRoute: String = ""
+    )
+
+    private val _uiState = MutableStateFlow(SharedUiState())
+    val uiState: StateFlow<SharedUiState> = _uiState.asStateFlow()
+
+    internal fun setScreenParams(
+        screen: Screen,
+        screenTitle: String,
+    ) {
+        if (_uiState.value.navCurrentRoute.isEmpty() || _uiState.value.navCurrentRoute.contains(screen.route)) {
+           _uiState.update { currentState->
+                   currentState.copy(currentScreen = screen, currentScreenTitle =screenTitle)
+           }
+        }
+    }
 }
 

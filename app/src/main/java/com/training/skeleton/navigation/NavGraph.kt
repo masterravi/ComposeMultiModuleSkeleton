@@ -5,55 +5,59 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.DashboardCompose
 import com.training.skeleton.feature_profile.ProfileCompose
 import com.training.skeleton.feature_settings.SettingsCompose
 
 
 @Composable
-fun NavGraph(navController: NavHostController) {
+fun NavGraph(navController: NavHostController, mainActivityViewModel: MainActivityViewModel) {
 
     NavHost(
         navController = navController,
-        startDestination = NavRoute.Dashboard.path
+        startDestination = Screen.Dashboard.route
     ) {
 
-        addProfileScreen(navController, this)
+        addProfileScreen(navController,mainActivityViewModel, this)
 
-        addDashboardScreen(navController, this)
+        addDashboardScreen(navController,mainActivityViewModel, this)
 
-        addSettingsScreen(navController, this)
+        addSettingsScreen(navController,mainActivityViewModel, this)
 
     }
 }
 
 private fun addDashboardScreen(
     navController: NavHostController,
+    mainActivityViewModel: MainActivityViewModel,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = NavRoute.Dashboard.path) {
+    navGraphBuilder.composable(route = Screen.Dashboard.route) {
         DashboardCompose(
+            mainActivityViewModel = mainActivityViewModel,
             navigateToProfile = {
-                navController.navigate(NavRoute.Profile.path)
-            },
-            navigateToSettings = {
-                navController.navigate(NavRoute.Settings.path)
+                navController.navigate(Screen.Profile.route)
             }
-        )
+        ) {
+            navController.navigate(Screen.Settings.route)
+        }
     }
 }
 
 private fun addProfileScreen(
     navController: NavHostController,
+    mainActivityViewModel: MainActivityViewModel,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = NavRoute.Profile.path) {
+    navGraphBuilder.composable(route = Screen.Profile.route) {
         ProfileCompose(
+            mainActivityViewModel = mainActivityViewModel,
             navigateToDashboard = {
-                navController.navigate(NavRoute.Dashboard.path)
+                navController.navigate(Screen.Dashboard.route)
             },
             navigateToSettings = {
-                navController.navigate(NavRoute.Settings.path)
+                navController.navigate(Screen.Settings.route)
             }
         )
     }
@@ -61,15 +65,17 @@ private fun addProfileScreen(
 
 private fun addSettingsScreen(
     navController: NavHostController,
+    mainActivityViewModel: MainActivityViewModel,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = NavRoute.Settings.path) {
+    navGraphBuilder.composable(route = Screen.Settings.route) {
         SettingsCompose(
+            mainActivityViewModel = mainActivityViewModel,
             navigateToDashboard = {
-                navController.navigate(NavRoute.Dashboard.path)
+                navController.navigate(Screen.Dashboard.route)
             },
             navigateToProfile = {
-                navController.navigate(NavRoute.Profile.path)
+                navController.navigate(Screen.Profile.route)
             }
         )
     }
