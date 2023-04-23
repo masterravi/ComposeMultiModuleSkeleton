@@ -47,9 +47,8 @@ class MainActivity : ComponentActivity() {
                             BottomBar(bottomNavigationItems,navHostController)
                         }
                     ) {
-
+                        MainContent(navHostController)
                     }
-                    MainContent(navHostController)
                 }
             }
         }
