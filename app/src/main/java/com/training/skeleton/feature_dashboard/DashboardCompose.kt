@@ -1,29 +1,24 @@
 package com.training.skeleton.feature_dashboard
 
-import android.widget.GridView
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.data.Anime
-import com.training.skeleton.feature_dashboard.data.Title
 import com.training.skeleton.navigation.Screen
 
 @Composable
@@ -33,17 +28,26 @@ fun DashboardCompose(
     navigateToSettings:()->Unit,
 ) {
 
+    val dashboardViewModel:DashboardViewModel = viewModel()
+    val uiState= dashboardViewModel.animeUIState.collectAsState()
+
+    val animeList=uiState.value.animeList
+
     mainActivityViewModel.setScreenParams(
         screen = Screen.Dashboard,
         screenTitle = "Dashboard"
     )
 
-    DashboardMainContent(navigateToProfile,navigateToSettings)
+    DashboardMainContent(navigateToProfile,navigateToSettings,animeList)
 
 
 }
 @Composable
-fun DashboardMainContent(navigateToProfile:()->Unit, navigateToSettings:()->Unit) {
+fun DashboardMainContent(
+    navigateToProfile: () -> Unit,
+    navigateToSettings: () -> Unit,
+    animeList: List<Anime>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +63,7 @@ fun DashboardMainContent(navigateToProfile:()->Unit, navigateToSettings:()->Unit
         Button(onClick = { navigateToSettings()}) {
             Text(text = "Go to settings")
         }
-        ShowAnimeList(animeList = animeList)
+        ShowAnimeList(animeList)
     }
 }
 
@@ -94,7 +98,7 @@ fun ShowAnimeList(animeList:List<Anime>){
 fun DashboardPreview(){
     val  navigateToProfile : () -> Unit = {}
     val  navigateToSettings : () -> Unit = {}
-    DashboardMainContent(navigateToProfile,navigateToSettings)
+    DashboardMainContent(navigateToProfile, navigateToSettings, animeList)
 }
 
 @Composable
