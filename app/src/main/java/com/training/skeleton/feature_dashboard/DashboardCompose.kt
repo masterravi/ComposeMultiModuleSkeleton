@@ -14,12 +14,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.data.Anime
+import com.training.skeleton.feature_dashboard.data.DasboardViewModelFactory
 import com.training.skeleton.navigation.Screen
+import com.training.skeleton.repository.AnimeRepository
 
 @Composable
 fun DashboardCompose(
@@ -27,8 +31,9 @@ fun DashboardCompose(
     navigateToProfile:()->Unit,
     navigateToSettings:()->Unit,
 ) {
-
-    val dashboardViewModel:DashboardViewModel = viewModel()
+    val dashboardViewModel:DashboardViewModel = viewModel(factory = DasboardViewModelFactory(
+        AnimeRepository(LocalContext.current.applicationContext)
+    ))
     val uiState= dashboardViewModel.animeUIState.collectAsState()
 
     val animeList=uiState.value.animeList
@@ -46,7 +51,7 @@ fun DashboardCompose(
 fun DashboardMainContent(
     navigateToProfile: () -> Unit,
     navigateToSettings: () -> Unit,
-    animeList: List<Anime>
+    animeList:List<Anime>
 ) {
     Column(
         modifier = Modifier
@@ -86,8 +91,7 @@ fun ShowAnimeList(animeList:List<Anime>){
                 )
                 Text(
                     text = animeList[index].title.text,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.size(12.dp)
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -98,13 +102,13 @@ fun ShowAnimeList(animeList:List<Anime>){
 fun DashboardPreview(){
     val  navigateToProfile : () -> Unit = {}
     val  navigateToSettings : () -> Unit = {}
-    DashboardMainContent(navigateToProfile, navigateToSettings, animeList)
+    DashboardMainContent(navigateToProfile, navigateToSettings, listOf<Anime>())
 }
 
 @Composable
 @Preview
 fun ShowAnimeList(){
-    ShowAnimeList(animeList = animeList )
+    ShowAnimeList( )
 }
 
 
