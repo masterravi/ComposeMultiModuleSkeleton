@@ -10,7 +10,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.training.skeleton.MainActivityViewModel
-import com.training.skeleton.feature_dashboard.DashboardViewModel
 import com.training.skeleton.navigation.Screen
 
 @Composable

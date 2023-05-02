@@ -22,8 +22,10 @@ import coil.request.ImageRequest
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.data.Anime
 import com.training.skeleton.feature_dashboard.data.DasboardViewModelFactory
+import com.training.skeleton.feature_dashboard.data.Product
+import com.training.skeleton.feature_dashboard.data.ProductDetail
 import com.training.skeleton.navigation.Screen
-import com.training.skeleton.repository.AnimeRepository
+import com.training.skeleton.repository.ProductRepository
 
 @Composable
 fun DashboardCompose(
@@ -32,18 +34,18 @@ fun DashboardCompose(
     navigateToSettings:()->Unit,
 ) {
     val dashboardViewModel:DashboardViewModel = viewModel(factory = DasboardViewModelFactory(
-        AnimeRepository(LocalContext.current.applicationContext)
+        ProductRepository(LocalContext.current.applicationContext)
     ))
-    val uiState= dashboardViewModel.animeUIState.collectAsState()
+    val uiState= dashboardViewModel.productUIState.collectAsState()
 
-    val animeList=uiState.value.animeList
+    val productList=uiState.value.productList
 
     mainActivityViewModel.setScreenParams(
         screen = Screen.Dashboard,
         screenTitle = "Dashboard"
     )
 
-    DashboardMainContent(navigateToProfile,navigateToSettings,animeList)
+    DashboardMainContent(navigateToProfile,navigateToSettings,productList)
 
 
 }
@@ -51,7 +53,7 @@ fun DashboardCompose(
 fun DashboardMainContent(
     navigateToProfile: () -> Unit,
     navigateToSettings: () -> Unit,
-    animeList:List<Anime>
+    productList:List<ProductDetail>
 ) {
     Column(
         modifier = Modifier
@@ -68,29 +70,29 @@ fun DashboardMainContent(
         Button(onClick = { navigateToSettings()}) {
             Text(text = "Go to settings")
         }
-        ShowAnimeList(animeList)
+        ShowAnimeList(productList)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowAnimeList(animeList:List<Anime>){
+fun ShowAnimeList(productList:List<ProductDetail>){
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
-        items(animeList.size) { index ->
+        items(productList.size) { index ->
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(animeList[index].title.link)
+                        .data(productList[index].thumbnail)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier.size(128.dp)
                 )
                 Text(
-                    text = animeList[index].title.text,
+                    text = productList[index].title,
                     textAlign = TextAlign.Center
                 )
             }
@@ -102,7 +104,7 @@ fun ShowAnimeList(animeList:List<Anime>){
 fun DashboardPreview(){
     val  navigateToProfile : () -> Unit = {}
     val  navigateToSettings : () -> Unit = {}
-    DashboardMainContent(navigateToProfile, navigateToSettings, listOf<Anime>())
+    DashboardMainContent(navigateToProfile, navigateToSettings, listOf<ProductDetail>())
 }
 
 @Composable

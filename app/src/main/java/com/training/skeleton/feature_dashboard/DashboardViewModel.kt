@@ -2,50 +2,50 @@ package com.training.skeleton.feature_dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.training.skeleton.feature_dashboard.data.Anime
-import com.training.skeleton.feature_dashboard.data.Title
+import com.training.skeleton.feature_dashboard.data.Product
+import com.training.skeleton.feature_dashboard.data.ProductDetail
 import com.training.skeleton.network.DataState
-import com.training.skeleton.repository.AnimeRepository
+import com.training.skeleton.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class DashboardViewModel( var animeRepository:AnimeRepository):ViewModel() {
+class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
 
     data class AnimeUIState(
-        var animeList:List<Anime> = mutableListOf(),
+        var productList:List<ProductDetail> = mutableListOf(),
         var showErrorMessage:String="",
         var isLoading:Boolean=false
     )
 
-    private val _animeUIState= MutableStateFlow(AnimeUIState())
-    val animeUIState:StateFlow<AnimeUIState> = _animeUIState.asStateFlow()
+    private val _productUIState= MutableStateFlow(AnimeUIState())
+    val productUIState:StateFlow<AnimeUIState> = _productUIState.asStateFlow()
     init {
-        getAnimeList(animeRepository)
+        getAnimeList(productRepository)
     }
 
-    fun getAnimeList(animeRepository: AnimeRepository){
+    fun getAnimeList(productRepository: ProductRepository){
         viewModelScope.launch(Dispatchers.IO) {
-            animeRepository.fetchAnimeList().collect{ animeDataState->
-                when (animeDataState) {
+            productRepository.fetchProductList().collect{ productDataState->
+                when (productDataState) {
                     is DataState.Error -> {
-                        _animeUIState.update {
-                            it.copy(showErrorMessage =animeDataState.errorMessage, isLoading = false)
+                        _productUIState.update {
+                            it.copy(showErrorMessage =productDataState.errorMessage, isLoading = false)
                         }
                     }
 
                     is DataState.Success -> {
-                        if (animeDataState.data.isNotEmpty()) {
-                            _animeUIState.update {
+                        if (productDataState.data.isNotEmpty()) {
+                            _productUIState.update {
                                 it.copy(
-                                    animeList = animeDataState.data,
+                                    productList = productDataState.data,
                                     isLoading = false
                                 )
                             }
                         }
                     }
                     is DataState.Loading -> {
-                        _animeUIState.update {
+                        _productUIState.update {
                             it.copy(isLoading = true)
                         }
                     }

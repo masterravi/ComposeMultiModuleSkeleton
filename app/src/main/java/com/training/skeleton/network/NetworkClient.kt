@@ -19,7 +19,7 @@ class NetworkClient{
         httpClient.connectTimeout(60, TimeUnit.SECONDS)
 
         Retrofit.Builder()
-            .baseUrl("https://raw.githubusercontent.com")
+            .baseUrl("https://dummyjson.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient.build())
             .build()
