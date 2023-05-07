@@ -1,12 +1,15 @@
 package com.training.skeleton.feature_dashboard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Shapes
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,15 +17,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -44,21 +48,28 @@ fun DashboardCompose(
     val uiState= dashboardViewModel.productUIState.collectAsState()
 
     val productList=uiState.value.productList
+    val isLoading=uiState.value.isLoading
 
     mainActivityViewModel.setScreenParams(
         screen = Screen.Dashboard,
         screenTitle = "Dashboard"
     )
 
-    DashboardMainContent(navigateToProfile,navigateToSettings,productList)
+    DashboardMainContent(dismissLoader =
+        {
+        dashboardViewModel.showHideLoader(it)
+        },
+        productList=productList
+        ,isLoading=isLoading
+    )
 
 
 }
 @Composable
 fun DashboardMainContent(
-    navigateToProfile: () -> Unit,
-    navigateToSettings: () -> Unit,
-    productList:List<ProductDetail>
+    dismissLoader: (Boolean) -> Unit,
+    productList: List<ProductDetail>,
+    isLoading:Boolean
 ) {
     Column(
         modifier = Modifier
@@ -68,8 +79,26 @@ fun DashboardMainContent(
         horizontalAlignment = Alignment.CenterHorizontally){
 
         ShowProductList(productList)
+
+        if (isLoading) {
+            Dialog(
+                onDismissRequest = {  dismissLoader.invoke(false) },
+                DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+            ) {
+                Box(
+                    contentAlignment= Alignment.Center,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(White, shape = RoundedCornerShape(8.dp))
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
     }
 }
+
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -102,12 +131,12 @@ fun ShowProductList(productList:List<ProductDetail>){
         }
     }
 }
+
+
 @Composable
 @Preview
 fun DashboardPreview(){
-    val  navigateToProfile : () -> Unit = {}
-    val  navigateToSettings : () -> Unit = {}
-    DashboardMainContent(navigateToProfile, navigateToSettings, listOf<ProductDetail>())
+    DashboardMainContent(dismissLoader={}, listOf<ProductDetail>(),false)
 }
 
 @Composable
