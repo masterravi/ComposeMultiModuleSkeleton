@@ -1,4 +1,4 @@
-package com.training.skeleton.network
+package com.training.network
 
 /**
  * A generic class that holds a value or an exception

@@ -4,7 +4,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -30,9 +29,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.training.network.response.ProductDetail
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.data.DasboardViewModelFactory
-import com.training.skeleton.feature_dashboard.data.ProductDetail
 import com.training.skeleton.navigation.Screen
 import com.training.skeleton.repository.ProductRepository
 

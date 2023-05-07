@@ -2,8 +2,8 @@ package com.training.skeleton.feature_dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.training.skeleton.feature_dashboard.data.ProductDetail
-import com.training.skeleton.network.DataState
+import com.training.network.DataState
+import com.training.network.response.ProductDetail
 import com.training.skeleton.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

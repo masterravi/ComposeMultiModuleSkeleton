@@ -2,11 +2,10 @@ package com.training.skeleton.repository
 
 import android.content.Context
 import android.util.Log
-import com.training.skeleton.feature_dashboard.data.Product
-import com.training.skeleton.feature_dashboard.data.ProductDetail
-import com.training.skeleton.network.DataState
-import com.training.skeleton.network.NetworkClient
-import com.training.trainingmodule.network.NetworkService
+import com.training.network.DataState
+import com.training.network.NetworkClient
+import com.training.network.NetworkService
+import com.training.network.response.ProductDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

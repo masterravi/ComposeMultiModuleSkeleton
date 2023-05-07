@@ -1,4 +1,4 @@
-package com.training.skeleton.feature_dashboard.data
+package com.training.network.response
 
 data class Product(
     val limit: Int,
