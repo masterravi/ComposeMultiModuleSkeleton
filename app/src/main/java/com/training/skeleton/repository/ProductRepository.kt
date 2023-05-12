@@ -2,6 +2,8 @@ package com.training.skeleton.repository
 
 import android.content.Context
 import android.util.Log
+import com.training.datastore.AppDatabase
+import com.training.datastore.entity.ProductEntity
 import com.training.network.DataState
 import com.training.network.NetworkClient
 import com.training.network.NetworkService
@@ -17,7 +19,24 @@ class ProductRepository(val context: Context) {
         try {
             val response = networkService.getProductList()
             if (response.isSuccessful && response.body() != null) {
-                    emit(DataState.Success(response.body()!!.products))
+                    val database = AppDatabase.getInstance(context)
+                    if(!response.body()!!.products.isEmpty()){
+                        val products= response.body()!!.products
+                        products.forEach {
+                            val productEntity= ProductEntity(
+                                id=it.id,
+                                brand = it.brand?:"",
+                                price = it.price?:0,
+                                category = it.category?:"",
+                                description = it.description?:"",
+                                rating = it.rating?:0.00,
+                                thumbnail = it.thumbnail?:"",
+                                title = it.title?:""
+                            )
+                            database.productDao().insert(productEntity)
+                        }
+                    }
+                    emit(DataState.Success(response.body()!!.))
                 } else {
                     // response from serve on failure
                     emit(DataState.Error("Something went wrong. Please try again later"))
