@@ -10,14 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductDao {
     @Query("SELECT * FROM product_entity")
-    suspend fun getAllAsset(): List<ProductEntity>
+    fun getAllProduct(): Flow<List<ProductEntity>>
 
-    @Query("SELECT * FROM product_entity where title=:assetName")
-    fun getAssetById(assetName: String): Flow<ProductEntity?>
+    @Query("SELECT * FROM product_entity where title=:title")
+    fun getProductById(title: String): Flow<ProductEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(item: ProductEntity)
-
-    @Query("SELECT * FROM product_entity")
-    fun getAllAssetFile(): Flow<List<ProductEntity>>
 }

@@ -29,7 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.training.network.response.ProductDetail
+import com.training.datastore.entity.ProductEntity
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.feature_dashboard.data.DasboardViewModelFactory
 import com.training.skeleton.navigation.Screen
@@ -67,7 +67,7 @@ fun DashboardCompose(
 @Composable
 fun DashboardMainContent(
     dismissLoader: (Boolean) -> Unit,
-    productList: List<ProductDetail>,
+    productList: List<ProductEntity>,
     isLoading:Boolean
 ) {
     Column(
@@ -101,7 +101,7 @@ fun DashboardMainContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductList(productList:List<ProductDetail>){
+fun ShowProductList(productList: List<ProductEntity>){
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(productList.size) { index ->
@@ -135,7 +135,7 @@ fun ShowProductList(productList:List<ProductDetail>){
 @Composable
 @Preview
 fun DashboardPreview(){
-    DashboardMainContent(dismissLoader={}, listOf<ProductDetail>(),false)
+    DashboardMainContent(dismissLoader={}, listOf<ProductEntity>(),false)
 }
 
 @Composable

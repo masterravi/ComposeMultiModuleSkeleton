@@ -2,8 +2,9 @@ package com.training.skeleton.feature_dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.training.datastore.entity.ProductEntity
 import com.training.network.DataState
-import com.training.network.response.ProductDetail
+import com.training.network.ResponseCodeEnums
 import com.training.skeleton.repository.ProductRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
 
     data class ProductUIState(
-        var productList:List<ProductDetail> = mutableListOf(),
+        var productList:List<ProductEntity> = mutableListOf(),
         var showErrorMessage:String="",
         var isLoading:Boolean=false
     )
@@ -20,10 +21,11 @@ class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
     private val _productUIState= MutableStateFlow(ProductUIState())
     val productUIState:StateFlow<ProductUIState> = _productUIState.asStateFlow()
     init {
+        fetchProductList(productRepository)
         getProductList(productRepository)
     }
 
-    fun getProductList(productRepository: ProductRepository){
+    fun fetchProductList(productRepository: ProductRepository){
         _productUIState.update {
             it.copy(isLoading = true)
         }
@@ -37,13 +39,7 @@ class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
                     }
 
                     is DataState.Success -> {
-                        if (productDataState.data.isNotEmpty()) {
-                            _productUIState.update {
-                                it.copy(
-                                    productList = productDataState.data,
-                                    isLoading = false
-                                )
-                            }
+                        if (productDataState.data==ResponseCodeEnums.STATUS_OK) {
                         }
                     }
                     is DataState.Loading -> {
@@ -55,6 +51,16 @@ class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
 
             }
         }
+    }
+
+     fun getProductList(productRepository: ProductRepository) {
+         viewModelScope.launch(Dispatchers.IO) {
+             productRepository.getProductList().collect{data->
+                 _productUIState.update {
+                     it.copy(productList=data, isLoading = false)
+                 }
+             }
+         }
 
     }
 

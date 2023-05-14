@@ -9,11 +9,13 @@ import com.training.network.NetworkClient
 import com.training.network.NetworkService
 import com.training.network.response.ProductDetail
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 
 class ProductRepository(val context: Context) {
 
-    fun fetchProductList(): Flow<DataState<List<ProductDetail>>> = flow {
+    fun getProductList()= AppDatabase.getInstance(context).productDao().getAllProduct()
+    fun fetchProductList(): Flow<DataState<String>> = flow {
         val networkService= NetworkClient().getInstance(context)
             .create(NetworkService::class.java)
         try {
@@ -36,7 +38,7 @@ class ProductRepository(val context: Context) {
                             database.productDao().insert(productEntity)
                         }
                     }
-                    emit(DataState.Success(response.body()!!.))
+                    emit(DataState.Success("0"))
                 } else {
                     // response from serve on failure
                     emit(DataState.Error("Something went wrong. Please try again later"))
