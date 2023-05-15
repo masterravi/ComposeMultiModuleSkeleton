@@ -1,4 +1,4 @@
-package com.training.skeleton.feature_dashboard
+package com.training.skeleton.presentation.feature_dashboard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,7 +31,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.datastore.entity.ProductEntity
 import com.training.skeleton.MainActivityViewModel
-import com.training.skeleton.feature_dashboard.data.DasboardViewModelFactory
+import com.training.skeleton.presentation.feature_dashboard.data.DasboardViewModelFactory
 import com.training.skeleton.navigation.Screen
 import com.training.skeleton.repository.ProductRepository
 
@@ -41,9 +41,7 @@ fun DashboardCompose(
     navigateToProfile:()->Unit,
     navigateToSettings:()->Unit,
 ) {
-    val dashboardViewModel:DashboardViewModel = viewModel(factory = DasboardViewModelFactory(
-        ProductRepository(LocalContext.current.applicationContext)
-    ))
+    val dashboardViewModel: DashboardViewModel = viewModel()
     val uiState= dashboardViewModel.productUIState.collectAsState()
 
     val productList=uiState.value.productList

@@ -1,4 +1,4 @@
-package com.training.skeleton.feature_settings
+package com.training.skeleton.presentation.feature_settings
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

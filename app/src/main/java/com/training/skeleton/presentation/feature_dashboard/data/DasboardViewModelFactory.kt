@@ -1,8 +1,8 @@
-package com.training.skeleton.feature_dashboard.data
+package com.training.skeleton.presentation.feature_dashboard.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.training.skeleton.feature_dashboard.DashboardViewModel
+import com.training.skeleton.presentation.feature_dashboard.DashboardViewModel
 import com.training.skeleton.repository.ProductRepository
 
 class DasboardViewModelFactory(private val productRepository: ProductRepository) :

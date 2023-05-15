@@ -1,4 +1,4 @@
-package com.training.skeleton.feature_dashboard
+package com.training.skeleton.presentation.feature_dashboard
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -6,10 +6,13 @@ import com.training.datastore.entity.ProductEntity
 import com.training.network.DataState
 import com.training.network.ResponseCodeEnums
 import com.training.skeleton.repository.ProductRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
 
     data class ProductUIState(
@@ -55,11 +58,11 @@ class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
 
      fun getProductList(productRepository: ProductRepository) {
          viewModelScope.launch(Dispatchers.IO) {
-             productRepository.getProductList().collect{data->
-                 _productUIState.update {
-                     it.copy(productList=data, isLoading = false)
-                 }
-             }
+             productRepository.getProductList().onEach {
+                     value -> _productUIState.update {
+                                it.copy(productList=value, isLoading = false)
+                    }
+             }.collect()
          }
 
     }

@@ -6,9 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.training.skeleton.MainActivityViewModel
-import com.training.skeleton.feature_dashboard.DashboardCompose
-import com.training.skeleton.feature_profile.ProfileCompose
-import com.training.skeleton.feature_settings.SettingsCompose
+import com.training.skeleton.presentation.feature_dashboard.DashboardCompose
+import com.training.skeleton.presentation.feature_profile.ProfileCompose
+import com.training.skeleton.presentation.feature_settings.SettingsCompose
 
 
 @Composable
