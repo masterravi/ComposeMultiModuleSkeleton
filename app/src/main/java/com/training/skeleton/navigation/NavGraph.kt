@@ -38,10 +38,11 @@ private fun addDashboardScreen(
             mainActivityViewModel = mainActivityViewModel,
             navigateToProfile = {
                 navController.navigate(Screen.Profile.route)
+            },
+            navigateToSettings = {
+                navController.navigate(Screen.Settings.route)
             }
-        ) {
-            navController.navigate(Screen.Settings.route)
-        }
+        )
     }
 }
 

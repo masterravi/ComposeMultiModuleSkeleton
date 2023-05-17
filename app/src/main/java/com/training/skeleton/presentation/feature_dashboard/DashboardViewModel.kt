@@ -11,9 +11,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class DashboardViewModel(productRepository :ProductRepository):ViewModel() {
+class DashboardViewModel @Inject constructor(productRepository :ProductRepository):ViewModel() {
 
     data class ProductUIState(
         var productList:List<ProductEntity> = mutableListOf(),

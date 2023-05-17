@@ -4,10 +4,15 @@ import android.content.Context
 import com.training.datastore.dao.ProductDao
 import com.training.network.NetworkService
 import com.training.skeleton.repository.ProductRepository
+import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+@Module
+@InstallIn(SingletonComponent::class)
 class RepositoryModule {
 
     @Singleton
@@ -20,7 +25,7 @@ class RepositoryModule {
         return ProductRepository(
             productDao = productDao,
             networkService = networkService,
-            context = context,
+            applicationContext = context,
         )
     }
 }

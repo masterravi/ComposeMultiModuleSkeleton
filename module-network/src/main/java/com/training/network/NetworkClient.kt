@@ -4,25 +4,32 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import java.util.logging.Level
+import javax.inject.Inject
 
-
-class NetworkClient{
+@Module
+@InstallIn(SingletonComponent::class)
+class NetworkClient @Inject constructor(
+    @ApplicationContext private val context: Context){
     private var retrofitInstance: Retrofit? = null
 
-    fun getInstance(context: Context): Retrofit = retrofitInstance ?: kotlin.run {
+    fun getInstance(): Retrofit = retrofitInstance ?: kotlin.run {
 
         val httpClient = OkHttpClient.Builder()
         httpClient.readTimeout(60, TimeUnit.SECONDS)
         httpClient.writeTimeout(60, TimeUnit.SECONDS)
         httpClient.connectTimeout(60, TimeUnit.SECONDS)
         httpClient.addNetworkInterceptor(CacheInterceptor())
-        httpClient.addInterceptor(ForceCacheInterceptor(context.applicationContext))
+        httpClient.addInterceptor(ForceCacheInterceptor(context))
         if (BuildConfig.DEBUG) {
             val logging = HttpLoggingInterceptor()
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)

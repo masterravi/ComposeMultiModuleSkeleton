@@ -15,7 +15,9 @@ import com.training.skeleton.ui.theme.JetpackSkeletonTheme
 import com.training.skeleton.uiCore.BottomBar
 import com.training.skeleton.uiCore.BottomNavigationScreens
 import com.training.skeleton.uiCore.TopBar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val mainActivityViewModel: MainActivityViewModel by viewModels()

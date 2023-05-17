@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -39,9 +40,9 @@ import com.training.skeleton.repository.ProductRepository
 fun DashboardCompose(
     mainActivityViewModel: MainActivityViewModel =viewModel(),
     navigateToProfile:()->Unit,
-    navigateToSettings:()->Unit,
+    navigateToSettings:()->Unit
 ) {
-    val dashboardViewModel: DashboardViewModel = viewModel()
+    val dashboardViewModel: DashboardViewModel = hiltViewModel()
     val uiState= dashboardViewModel.productUIState.collectAsState()
 
     val productList=uiState.value.productList

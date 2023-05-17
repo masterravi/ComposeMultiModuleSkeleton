@@ -17,13 +17,11 @@ import javax.inject.Singleton
 class ProductRepository(
     @ApplicationContext private val applicationContext: Context,
     private val  productDao: ProductDao,
-    private val  networkService: NetworkService
+    private val  networkService: NetworkService,
 ) {
 
     fun getProductList()= AppDatabase.getInstance(applicationContext).productDao().getAllProduct()
     fun fetchProductList(): Flow<DataState<String>> = flow {
-        val networkService= NetworkClient().getInstance(applicationContext)
-            .create(NetworkService::class.java)
         try {
             val response = networkService.getProductList()
             if (response.isSuccessful && response.body() != null) {
