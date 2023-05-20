@@ -6,7 +6,6 @@ import com.training.datastore.AppDatabase
 import com.training.datastore.dao.ProductDao
 import com.training.datastore.entity.ProductEntity
 import com.training.network.DataState
-import com.training.network.NetworkClient
 import com.training.network.NetworkService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +19,9 @@ class ProductRepository(
     private val  networkService: NetworkService,
 ) {
 
-    fun getProductList()= AppDatabase.getInstance(applicationContext).productDao().getAllProduct()
+    fun observeProductList()= productDao.getAllProduct()
+
+    fun observeProductDetail(productId:Int)= productDao.getProductById(productId)
     fun fetchProductList(): Flow<DataState<String>> = flow {
         try {
             val response = networkService.getProductList()

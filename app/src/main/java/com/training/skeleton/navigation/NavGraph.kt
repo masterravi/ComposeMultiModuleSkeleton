@@ -1,8 +1,7 @@
 package com.training.skeleton.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.training.skeleton.MainActivityViewModel
@@ -37,10 +36,14 @@ private fun addDashboardScreen(
         DashboardCompose(
             mainActivityViewModel = mainActivityViewModel,
             navigateToProfile = {
-                navController.navigate(Screen.Profile.route)
+                navController.navigate(
+                    route = "${Screen.Profile.route}/$it",
+                )
             },
             navigateToSettings = {
-                navController.navigate(Screen.Settings.route)
+                navController.navigate(
+                    route = "${Screen.Profile.route}/$it"
+                )
             }
         )
     }
@@ -51,14 +54,18 @@ private fun addProfileScreen(
     mainActivityViewModel: MainActivityViewModel,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = Screen.Profile.route) {
+    navGraphBuilder.composable(
+        route = "${Screen.Profile.route}/{productId}",
+        arguments = listOf(navArgument("productId") { type = NavType.StringType })) {
         ProfileCompose(
             mainActivityViewModel = mainActivityViewModel,
             navigateToDashboard = {
                 navController.navigate(Screen.Dashboard.route)
             },
             navigateToSettings = {
-                navController.navigate(Screen.Settings.route)
+                navController.navigate(
+                    route = "${Screen.Profile.route}/$it"
+                )
             }
         )
     }
@@ -69,14 +76,19 @@ private fun addSettingsScreen(
     mainActivityViewModel: MainActivityViewModel,
     navGraphBuilder: NavGraphBuilder
 ) {
-    navGraphBuilder.composable(route = Screen.Settings.route) {
+    navGraphBuilder.composable(
+        route = "${Screen.Settings.route}/{productId}",
+        arguments = listOf(navArgument("productId") { type = NavType.StringType })
+    ) {
         SettingsCompose(
             mainActivityViewModel = mainActivityViewModel,
             navigateToDashboard = {
                 navController.navigate(Screen.Dashboard.route)
             },
             navigateToProfile = {
-                navController.navigate(Screen.Profile.route)
+                navController.navigate(
+                    route = "${Screen.Profile.route}/$it"
+                )
             }
         )
     }

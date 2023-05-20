@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.training.skeleton.navigation.Screen
 
 @Composable
 fun BottomBar(bottomNavigationScreens: List<BottomNavigationScreens>, navController: NavHostController) {
@@ -17,8 +18,14 @@ fun BottomBar(bottomNavigationScreens: List<BottomNavigationScreens>, navControl
             BottomNavigationItem(
                 selected = currentRoute==bottomNavigationScreens.route,
                 onClick = {
-                    if (currentRoute != bottomNavigationScreens.route) {
-                        navController.navigate(bottomNavigationScreens.route)
+                    if (currentRoute != Screen.Dashboard.route) {
+                        navController.navigate(
+                            route = "${bottomNavigationScreens.route}/0"
+                        )
+                    }else{
+                        navController.navigate(
+                            route = bottomNavigationScreens.route
+                        )
                     }
                 },
                 icon = {

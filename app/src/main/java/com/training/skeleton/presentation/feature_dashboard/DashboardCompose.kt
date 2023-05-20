@@ -3,6 +3,7 @@ package com.training.skeleton.presentation.feature_dashboard
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -32,15 +33,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.datastore.entity.ProductEntity
 import com.training.skeleton.MainActivityViewModel
-import com.training.skeleton.presentation.feature_dashboard.data.DasboardViewModelFactory
 import com.training.skeleton.navigation.Screen
-import com.training.skeleton.repository.ProductRepository
 
 @Composable
 fun DashboardCompose(
     mainActivityViewModel: MainActivityViewModel =viewModel(),
-    navigateToProfile:()->Unit,
-    navigateToSettings:()->Unit
+    navigateToProfile:(productId:Int)->Unit,
+    navigateToSettings:(productId:Int)->Unit
 ) {
     val dashboardViewModel: DashboardViewModel = hiltViewModel()
     val uiState= dashboardViewModel.productUIState.collectAsState()
@@ -57,8 +56,9 @@ fun DashboardCompose(
         {
         dashboardViewModel.showHideLoader(it)
         },
-        productList=productList
-        ,isLoading=isLoading
+        productList=productList,
+        isLoading=isLoading,
+        navigateToProfile=navigateToProfile
     )
 
 
@@ -67,7 +67,8 @@ fun DashboardCompose(
 fun DashboardMainContent(
     dismissLoader: (Boolean) -> Unit,
     productList: List<ProductEntity>,
-    isLoading:Boolean
+    isLoading: Boolean,
+    navigateToProfile: (productId: Int) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -76,7 +77,7 @@ fun DashboardMainContent(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally){
 
-        ShowProductList(productList)
+        ShowProductList(productList,navigateToProfile)
 
         if (isLoading) {
             Dialog(
@@ -100,14 +101,18 @@ fun DashboardMainContent(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ShowProductList(productList: List<ProductEntity>){
+fun ShowProductList(productList: List<ProductEntity>,navigateToProfile: (productId: Int) -> Unit){
 
     LazyVerticalGrid(cells = GridCells.Fixed(2)) {
         items(productList.size) { index ->
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.clickable {
+                    navigateToProfile.invoke(productList[index].id)
+                }
             ) {
+
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(productList[index].thumbnail)
@@ -134,7 +139,7 @@ fun ShowProductList(productList: List<ProductEntity>){
 @Composable
 @Preview
 fun DashboardPreview(){
-    DashboardMainContent(dismissLoader={}, listOf<ProductEntity>(),false)
+    DashboardMainContent(dismissLoader={}, listOf<ProductEntity>(), false,{})
 }
 
 @Composable

@@ -8,7 +8,6 @@ import com.training.network.ResponseCodeEnums
 import com.training.skeleton.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -59,7 +58,7 @@ class DashboardViewModel @Inject constructor(productRepository :ProductRepositor
 
      fun getProductList(productRepository: ProductRepository) {
          viewModelScope.launch(Dispatchers.IO) {
-             productRepository.getProductList().onEach {
+             productRepository.observeProductList().onEach {
                      value -> _productUIState.update {
                                 it.copy(productList=value, isLoading = false)
                     }
