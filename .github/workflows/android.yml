@@ -43,3 +43,25 @@ jobs:
         with:
           name: app
           path: app/build/outputs/apk/debug/app-debug.apk
+
+  build:
+    name: Upload apk to App Tester
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
+      - name: build release
+        run: bash ./gradlew assembleDebug
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.2.2
+        with:
+          appId: '1:973762599996:android:8c6387825aaafa69037739'
+          token: '1//0gSHB6tqvrbr8CgYIARAAGBASNwF-L9IrjBwBPiU2CeUmThFWYPbMrZkXw-Lr0jH1YqINJaZSDOCkrNGBh8u8b2-_ivQ0bjP9vhE'
+          groups: testers
+          file: app/build/outputs/apk/debug/app-debug.apk
