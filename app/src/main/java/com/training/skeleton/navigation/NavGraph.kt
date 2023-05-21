@@ -64,7 +64,7 @@ private fun addProfileScreen(
             },
             navigateToSettings = {
                 navController.navigate(
-                    route = "${Screen.Profile.route}/$it"
+                    route = "${Screen.Settings.route}/${it ?: "0"}"
                 )
             }
         )

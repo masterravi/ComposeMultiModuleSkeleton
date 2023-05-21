@@ -19,7 +19,7 @@ import com.training.skeleton.presentation.feature_dashboard.DashboardViewModel
 fun ProfileCompose(
     mainActivityViewModel: MainActivityViewModel =viewModel(),
     navigateToDashboard:()->Unit,
-    navigateToSettings:()->Unit
+    navigateToSettings:(String?)->Unit
 ) {
 
     val profileViewModel: ProfileViewModel = hiltViewModel()
@@ -39,7 +39,8 @@ fun ProfileCompose(
             Text(text = productUIState.value.productDetail?.title.toString())
         }
 
-        Button(onClick = { navigateToSettings() }) {
+        Button(onClick = {
+            navigateToSettings(productUIState.value.productDetail?.id.toString()) }) {
             Text(text = productUIState.value.productDetail?.description.toString())
         }
     }
