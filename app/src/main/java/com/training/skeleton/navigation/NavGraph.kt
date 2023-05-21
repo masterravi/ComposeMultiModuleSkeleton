@@ -42,7 +42,7 @@ private fun addDashboardScreen(
             },
             navigateToSettings = {
                 navController.navigate(
-                    route = "${Screen.Profile.route}/$it"
+                    route = "${Screen.Settings.route}/$it"
                 )
             }
         )
