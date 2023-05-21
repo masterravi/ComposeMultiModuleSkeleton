@@ -89,7 +89,8 @@ private fun addSettingsScreen(
                 navController.navigate(
                     route = "${Screen.Profile.route}/$it"
                 )
-            }
+            },
+            id = it.arguments?.getString("productId")?: "0"
         )
     }
 }
