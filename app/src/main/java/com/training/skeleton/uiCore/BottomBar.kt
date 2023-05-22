@@ -18,14 +18,17 @@ fun BottomBar(bottomNavigationScreens: List<BottomNavigationScreens>, navControl
             BottomNavigationItem(
                 selected = currentRoute==bottomNavigationScreens.route,
                 onClick = {
-                    if (currentRoute != Screen.Dashboard.route) {
-                        navController.navigate(
-                            route = "${bottomNavigationScreens.route}/0"
-                        )
-                    }else{
-                        navController.navigate(
-                            route = bottomNavigationScreens.route
-                        )
+
+                    if(currentRoute?.startsWith(bottomNavigationScreens.route) == false) {
+                        if (bottomNavigationScreens.route != Screen.Dashboard.route) {
+                            navController.navigate(
+                                route = "${bottomNavigationScreens.route}/0"
+                            )
+                        } else {
+                            navController.navigate(
+                                route = bottomNavigationScreens.route
+                            )
+                        }
                     }
                 },
                 icon = {
@@ -41,5 +44,5 @@ fun BottomBar(bottomNavigationScreens: List<BottomNavigationScreens>, navControl
 @Composable
 private fun currentRoute(navController: NavHostController): String? {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    return navBackStackEntry?.arguments?.getString("")
+    return navBackStackEntry?.destination?.route
 }

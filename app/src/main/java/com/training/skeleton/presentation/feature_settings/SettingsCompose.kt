@@ -16,7 +16,8 @@ import com.training.skeleton.navigation.Screen
 fun SettingsCompose(
     mainActivityViewModel: MainActivityViewModel,
     navigateToDashboard:()->Unit,
-    navigateToProfile:()->Unit
+    navigateToProfile:(String)->Unit,
+    id : String = ""
 ) {
     mainActivityViewModel.setScreenParams(
         screen = Screen.Settings,
@@ -31,7 +32,7 @@ fun SettingsCompose(
             Text(text = "Go to Dashboard")
         }
 
-        Button(onClick = { navigateToProfile() }) {
+        Button(onClick = { navigateToProfile(id) }) {
             Text(text = "Go to Profile")
         }
     }

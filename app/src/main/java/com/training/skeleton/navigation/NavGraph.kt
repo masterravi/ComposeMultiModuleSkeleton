@@ -42,7 +42,7 @@ private fun addDashboardScreen(
             },
             navigateToSettings = {
                 navController.navigate(
-                    route = "${Screen.Profile.route}/$it"
+                    route = "${Screen.Settings.route}/$it"
                 )
             }
         )
@@ -64,7 +64,7 @@ private fun addProfileScreen(
             },
             navigateToSettings = {
                 navController.navigate(
-                    route = "${Screen.Profile.route}/$it"
+                    route = "${Screen.Settings.route}/${it ?: "0"}"
                 )
             }
         )
@@ -89,7 +89,8 @@ private fun addSettingsScreen(
                 navController.navigate(
                     route = "${Screen.Profile.route}/$it"
                 )
-            }
+            },
+            id = it.arguments?.getString("productId")?: "0"
         )
     }
 }
