@@ -6,9 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.training.trainingmodule.localization.data.room.entity.LanguageEntity
-import com.training.trainingmodule.localization.preferences.LocalizationPreferenceConstants
-import com.training.trainingmodule.localization.preferences.LocalizationPreferenceConstants.KEY_PREF_AKAMAIZED_SERVER_URL
-import com.training.trainingmodule.localization.preferences.PreferenceStorage
 import com.training.trainingmodule.localization.repository.LanguageRepositoryImpl
 import com.training.trainingmodule.localization.utilities.LocalizationConstants
 import com.training.trainingmodule.localization.utilities.LocalizationLogger
@@ -27,7 +24,6 @@ import kotlin.coroutines.CoroutineContext
 @Singleton
 class Philology @Inject constructor(
     private val baseUrl: String,
-    private val preferenceStorage: PreferenceStorage,
     val repository: LanguageRepositoryImpl,
     private val localLanguageFileName: String,
     @ApplicationContext val applicationContext: Context,
@@ -169,60 +165,6 @@ class Philology @Inject constructor(
 
     init {
         coroutineScope.launch(Dispatchers.IO) {
-            preferenceStorage.setValue(KEY_PREF_AKAMAIZED_SERVER_URL, baseUrl)
-        }
-
-        coroutineScope.launch {
-            val language = preferenceStorage.getFlowValue(
-                LocalizationPreferenceConstants.KEY_PREF_APP_LANGUAGE,
-                LocalizationConstants.DEFAULT_APP_LANGUAGE
-            )
-            language.onEach {
-                try {
-
-                    currentLanguage.postValue(it)
-
-                    if (languageEntity.value?.languageName != it) {
-
-                        val languageData = repository.getLanguageFileFromDB(it)
-
-                        when {
-                            languageData.isEmpty() && it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
-                                val response =
-                                    repository.getLanguageFileFromServer(
-                                        it, "1.0.0"
-                                    )
-                                if (response) {
-                                    languageEntity.postValue(
-                                        repository.getLanguageFileFromDB(
-                                            it
-                                        )[0]
-                                    )
-                                }
-                            }
-                            it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
-                                languageEntity.postValue(languageData[0])
-                            }
-                            it == LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
-                                if (languageData.isEmpty()) {
-                                    repository.getLanguageFileFromServer(
-                                        it,
-                                        "1.0.0"
-                                    )
-                                } else if (languageData.isNotEmpty()) {
-                                    languageEntity.postValue(languageData[0])
-                                }
-
-                            }
-                        }
-                    }
-                } catch (e: Exception) {
-                    LocalizationLogger.handle(e)
-                }
-            }.collect()
-        }
-
-        coroutineScope.launch(Dispatchers.IO) {
             try {
                 val langJsonString = getLocalizationData(applicationContext, localLanguageFileName)
                 langJsonString?.let {
@@ -307,9 +249,6 @@ class Philology @Inject constructor(
                 }
             }
         }
-
-        preferenceStorage.setValue(LocalizationPreferenceConstants.KEY_PREF_APP_LANGUAGE,language)
-
         return result
     }
 
