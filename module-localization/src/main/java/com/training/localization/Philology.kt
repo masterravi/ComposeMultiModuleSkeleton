@@ -5,16 +5,14 @@ import android.content.ContextWrapper
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.training.trainingmodule.localization.data.room.entity.LanguageEntity
-import com.training.trainingmodule.localization.repository.LanguageRepositoryImpl
-import com.training.trainingmodule.localization.utilities.LocalizationConstants
+import com.training.datastore.entity.LanguageEntity
+import com.training.localization.repository.LanguageRepositoryImpl
+import com.training.trainingmodule.localization.utilities.LangConstants
 import com.training.trainingmodule.localization.utilities.LocalizationLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +32,7 @@ class Philology @Inject constructor(
         fun wrap(baseContext: Context): ContextWrapper = PhilologyContextWrapper(baseContext)
 
         private val currentLanguage: MutableLiveData<String> =
-            MutableLiveData(LocalizationConstants.DEFAULT_APP_LANGUAGE)
+            MutableLiveData(LangConstants.DEFAULT_APP_LANGUAGE)
         var languageEntity: MutableLiveData<LanguageEntity?> = MutableLiveData(null)
 
         private var defaultLanguageData: MutableLiveData<Map<String, Any>?> = MutableLiveData(null)
@@ -60,7 +58,7 @@ class Philology @Inject constructor(
         }
 
         fun String.getString(id: String): String {
-            return if (currentLanguage.value.equals(LocalizationConstants.DEFAULT_APP_LANGUAGE)) {
+            return if (currentLanguage.value.equals(LangConstants.DEFAULT_APP_LANGUAGE)) {
                 when {
                     defaultLanguageData.value?.containsKey(id) == true && defaultLanguageData.value?.get(
                         id
@@ -95,7 +93,7 @@ class Philology @Inject constructor(
 
         fun getString(id: String): String {
             // TrainingAppLogger.debug("StringFile : ","$id" + defaultLanguageData.value + languageEntity.value)
-            return if (currentLanguage.value.equals(LocalizationConstants.DEFAULT_APP_LANGUAGE)) {
+            return if (currentLanguage.value.equals(LangConstants.DEFAULT_APP_LANGUAGE)) {
                 when {
                     defaultLanguageData.value?.containsKey(id) == true && defaultLanguageData.value?.get(
                         id
@@ -179,7 +177,7 @@ class Philology @Inject constructor(
                 LocalizationLogger.debug("exception language from asset" + e.localizedMessage)
                 LocalizationLogger.handle(e)
             }
-            repository.getLanguageFileFromDBinFlow(LocalizationConstants.DEFAULT_APP_LANGUAGE)
+            repository.getLanguageFileFromDBinFlow(LangConstants.DEFAULT_APP_LANGUAGE)
                 .collect {
                     try {
                         if (it.isNotEmpty()) {
@@ -203,7 +201,7 @@ class Philology @Inject constructor(
         val languageData = repository.getLanguageFileFromDB(language)
 
         when {
-            languageData.isEmpty() && language != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+            languageData.isEmpty() && language != LangConstants.DEFAULT_APP_LANGUAGE -> {
                 val response =
                     repository.getLanguageFileFromServer(
                         language,
@@ -218,7 +216,7 @@ class Philology @Inject constructor(
                     )
                 }
             }
-            languageData.isNotEmpty() && language != LocalizationConstants.DEFAULT_APP_LANGUAGE && fileVersion != languageData[0].versionName -> {
+            languageData.isNotEmpty() && language != LangConstants.DEFAULT_APP_LANGUAGE && fileVersion != languageData[0].versionName -> {
                 val response =
                     repository.getLanguageFileFromServer(
                         language,
@@ -232,10 +230,10 @@ class Philology @Inject constructor(
                     )
                 }
             }
-            language != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+            language != LangConstants.DEFAULT_APP_LANGUAGE -> {
                 languageEntity.postValue(languageData.get(0))
             }
-            language == LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+            language == LangConstants.DEFAULT_APP_LANGUAGE -> {
                 if (languageData.isNotEmpty() && fileVersion != languageData[0].versionName) {
                     val response = repository.getLanguageFileFromServer(
                         language,
@@ -262,7 +260,7 @@ class Philology @Inject constructor(
                     language,
                     fileVersion
                 )
-            if(response && language!=LocalizationConstants.DEFAULT_APP_LANGUAGE){
+            if(response && language!=LangConstants.DEFAULT_APP_LANGUAGE){
                 languageEntity.postValue(
                     repository.getLanguageFileFromDB(
                         language

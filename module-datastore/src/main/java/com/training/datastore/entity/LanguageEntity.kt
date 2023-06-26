@@ -1,4 +1,4 @@
-package com.training.trainingmodule.localization.data.room.entity
+package com.training.datastore.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,4 +1,4 @@
-package com.training.localization.room
+package com.training.datastore
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
