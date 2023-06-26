@@ -1,10 +1,10 @@
-package com.training.localization.room.dao
+package com.training.datastore.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.training.trainingmodule.localization.data.room.entity.LanguageEntity
+import com.training.datastore.entity.LanguageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

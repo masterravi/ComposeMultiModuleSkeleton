@@ -5,18 +5,25 @@ import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.training.datastore.dao.LanguageDao
 import com.training.datastore.dao.ProductDao
 import com.training.datastore.entity.ProductEntity
-import java.util.logging.Logger
+import com.training.datastore.entity.LanguageEntity
 
 @Database(
-    entities = [ProductEntity::class],
+    entities = [ProductEntity::class, LanguageEntity::class],
     exportSchema = false,
-    version = 1
+    version = 2
+)
+
+@TypeConverters(
+    ConverterList::class
 )
 abstract class AppDatabase: RoomDatabase() {
     abstract fun productDao(): ProductDao
+    abstract fun LanguageDao(): LanguageDao
 
     companion object {
 

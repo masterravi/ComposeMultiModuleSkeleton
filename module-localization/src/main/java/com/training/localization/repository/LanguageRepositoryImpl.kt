@@ -1,13 +1,12 @@
-package com.training.trainingmodule.localization.repository
+package com.training.localization.repository
 
 import com.google.gson.Gson
+import com.training.datastore.dao.LanguageDao
 import com.training.localization.LocalizationBuilder.Companion.LOCALIZATION_FILE_PREFIX
-import com.training.localization.room.dao.LanguageDao
-import com.training.trainingmodule.localization.data.room.entity.LanguageEntity
-import com.training.trainingmodule.localization.network.NetworkInterface
-import com.training.trainingmodule.localization.network.RetrofitHelper
+import com.training.network.NetworkService
+import com.training.datastore.entity.LanguageEntity
 import com.training.trainingmodule.localization.utilities.DispatcherProvider
-import com.training.trainingmodule.localization.utilities.LocalizationConstants
+import com.training.trainingmodule.localization.utilities.LangConstants
 import com.training.trainingmodule.localization.utilities.LocalizationLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +18,8 @@ import javax.inject.Singleton
 @Singleton
 class LanguageRepositoryImpl @Inject constructor(
     private val languageDao: LanguageDao,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val networkService: NetworkService
 ) {
     private var baseUrl = ""
 
@@ -42,11 +42,9 @@ class LanguageRepositoryImpl @Inject constructor(
                 LOCALIZATION_FILE_PREFIX
             )
 
-            val apiCall =
-                RetrofitHelper.getInstance(baseUrl).create(NetworkInterface::class.java)
 
             val result =
-                apiCall.getFileFromServer(baseUrl + "$fileName${LocalizationConstants.TEXT_FILE_EXTENSION}")
+                networkService.getFileFromServer(baseUrl + "$fileName${LangConstants.TEXT_FILE_EXTENSION}")
 
             if (result!= null && result.isSuccessful && result.body() != null && result.body().toString()
                     .isNotEmpty()

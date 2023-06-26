@@ -2,6 +2,7 @@ package com.training.datastore.di
 
 import android.content.Context
 import com.training.datastore.AppDatabase
+import com.training.datastore.dao.LanguageDao
 import com.training.datastore.dao.ProductDao
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,10 @@ object DatabaseModule {
     @Singleton
     fun provideProductDao(appDatabase: AppDatabase):ProductDao{
         return appDatabase.productDao()
+    }
+
+    @Provides
+    fun provideLanguageDao(appDatabase: AppDatabase): LanguageDao {
+        return appDatabase.LanguageDao()
     }
 }

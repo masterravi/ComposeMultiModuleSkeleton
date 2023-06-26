@@ -38,6 +38,8 @@ android {
 dependencies {
 
 
+    implementation project(':module-network')
+    implementation project(':module-datastore')
     /**
      * SDK Versions
      */
