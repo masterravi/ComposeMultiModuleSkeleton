@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.training.localization.Philology
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.navigation.Screen
 import com.training.skeleton.presentation.feature_dashboard.DashboardViewModel
@@ -27,7 +28,7 @@ fun ProfileCompose(
 
     mainActivityViewModel.setScreenParams(
         screen = Screen.Profile,
-        screenTitle = "Product Detail"
+        screenTitle = Philology.getString(id = "Dashboard1005")
     )
 
     Column(

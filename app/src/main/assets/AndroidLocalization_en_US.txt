@@ -1,0 +1,7 @@
+{
+    "Dashboard1001" : "Mobiles",
+    "Dashboard1002" : "Dashboard",
+    "Dashboard1003" : "Profile",
+    "Dashboard1004" : "Settings",
+    "Dashboard1005" : "Product Detail"
+}

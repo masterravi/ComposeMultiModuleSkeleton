@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val navHostController= rememberNavController()
+                    val navHostController = rememberNavController()
                     val bottomNavigationItems = listOf(
                         BottomNavigationScreens.Dashboard,
                         BottomNavigationScreens.Profile,
@@ -39,17 +41,19 @@ class MainActivity : ComponentActivity() {
                     Scaffold(
                         topBar = {
                             TopBar(navHostController = navHostController,
-                                   mainActivityViewModel = mainActivityViewModel,
-                                    onButtonClicked = {
-                                        navHostController.popBackStack()
-                                    }
+                                mainActivityViewModel = mainActivityViewModel,
+                                onButtonClicked = {
+                                    navHostController.popBackStack()
+                                }
                             )
                         },
                         bottomBar = {
-                            BottomBar(bottomNavigationItems,navHostController)
+                            BottomBar(bottomNavigationItems, navHostController)
                         }
-                    ) {
-                        MainContent(navHostController)
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.padding(innerPadding)) {
+                            MainContent(navHostController)
+                        }
                     }
                 }
             }
@@ -58,7 +62,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainContent(navHostController: NavHostController) {
-        NavGraph(navController = navHostController,mainActivityViewModel)
+        NavGraph(navController = navHostController, mainActivityViewModel)
     }
 
 }

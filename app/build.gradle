@@ -39,7 +39,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.1.1'
+        kotlinCompilerExtensionVersion compose_ui_version
     }
     packagingOptions {
         resources {
@@ -89,4 +89,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
 
     implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
+
+    /**
+     *  Compose foundation
+     * */
+
+    implementation("androidx.compose.foundation:foundation:$compose_ui_version")
 }

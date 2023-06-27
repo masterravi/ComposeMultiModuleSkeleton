@@ -1,13 +1,15 @@
 package com.training.localization.repository
 
+import android.content.Context
 import com.google.gson.Gson
 import com.training.datastore.dao.LanguageDao
-import com.training.localization.LocalizationBuilder.Companion.LOCALIZATION_FILE_PREFIX
-import com.training.network.NetworkService
 import com.training.datastore.entity.LanguageEntity
+import com.training.localization.LocalizationBuilder.Companion.LOCALIZATION_FILE_PREFIX
+import com.training.localization.Philology
+import com.training.network.NetworkService
 import com.training.trainingmodule.localization.utilities.DispatcherProvider
-import com.training.trainingmodule.localization.utilities.LangConstants
-import com.training.trainingmodule.localization.utilities.LocalizationLogger
+import com.training.localization.utilities.LocalizationLogger
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -19,9 +21,10 @@ import javax.inject.Singleton
 class LanguageRepositoryImpl @Inject constructor(
     private val languageDao: LanguageDao,
     private val dispatcherProvider: DispatcherProvider,
-    private val networkService: NetworkService
+    private val networkService: NetworkService,
+    @ApplicationContext val applicationContext: Context
 ) {
-    private var baseUrl = ""
+    private var baseUrl = "https://github.com/Gaurav2621998/ComposeMultiModuleSkeleton/blob/119865b6ca5ab92674b5646d7aed92a061017588/LanguageFiles/"
 
 
      fun getLanguageFileFromDB(languageName: String): List<LanguageEntity> {
@@ -42,15 +45,28 @@ class LanguageRepositoryImpl @Inject constructor(
                 LOCALIZATION_FILE_PREFIX
             )
 
+            // Uncomment it when loading file from server
+//            val result =
+//                networkService.getFileFromServer(baseUrl + "$fileName${LocalizationConstants.TEXT_FILE_EXTENSION}")
 
-            val result =
-                networkService.getFileFromServer(baseUrl + "$fileName${LangConstants.TEXT_FILE_EXTENSION}")
+            // Loading file from asset
+            val result = Philology.getLocalizationData(context = applicationContext, localLanguageFileName = fileName)
 
-            if (result!= null && result.isSuccessful && result.body() != null && result.body().toString()
-                    .isNotEmpty()
+            if (result!= null
+                // Uncomment it when loading file from server
+//                && result.isSuccessful
+//                && result.body() != null
+//                && result.body().toString()
+//                    .isNotEmpty()
             ) {
 
-                val fileResultObject = JSONObject(result.body().toString())
+//                LocalizationLogger.debug("LanguageData direct",""+result.body().toString())
+
+                // Uncomment it when loading file from server
+               // val fileResultObject = JSONObject(result.body().toString())
+                val fileResultObject = JSONObject(result);
+
+                LocalizationLogger.debug("LanguageData",""+fileResultObject)
 
                 val yourHashMap = Gson().fromJson(fileResultObject.toString(), Map::class.java)
 

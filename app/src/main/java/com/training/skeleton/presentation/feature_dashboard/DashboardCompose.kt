@@ -5,8 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
@@ -32,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.training.datastore.entity.ProductEntity
+import com.training.localization.Philology
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.navigation.Screen
 
@@ -49,7 +51,7 @@ fun DashboardCompose(
 
     mainActivityViewModel.setScreenParams(
         screen = Screen.Dashboard,
-        screenTitle = "Dashboard"
+        screenTitle = Philology.getString(id = "Dashboard1001")
     )
 
     DashboardMainContent(dismissLoader =
@@ -103,7 +105,7 @@ fun DashboardMainContent(
 @Composable
 fun ShowProductList(productList: List<ProductEntity>,navigateToProfile: (productId: Int) -> Unit){
 
-    LazyVerticalGrid(cells = GridCells.Fixed(2)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(productList.size) { index ->
             Column(
                 verticalArrangement = Arrangement.Center,
