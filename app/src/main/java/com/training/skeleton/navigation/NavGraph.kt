@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.training.skeleton.MainActivityViewModel
 import com.training.skeleton.presentation.feature_dashboard.DashboardCompose
+import com.training.skeleton.presentation.feature_language_settings.LanguageSettingScreen
 import com.training.skeleton.presentation.feature_profile.ProfileCompose
 import com.training.skeleton.presentation.feature_settings.SettingsCompose
 
@@ -90,7 +91,16 @@ private fun addSettingsScreen(
                     route = "${Screen.Profile.route}/$it"
                 )
             },
-            id = it.arguments?.getString("productId")?: "0"
+            id = it.arguments?.getString("productId")?: "0",
+            navigateToLanguageSettings = {
+                navController.navigate(Screen.LanguageSettings.route)
+            }
+        )
+    }
+
+    navGraphBuilder.composable(route = Screen.LanguageSettings.route) {
+        LanguageSettingScreen(
+            navHostController = navController
         )
     }
 }

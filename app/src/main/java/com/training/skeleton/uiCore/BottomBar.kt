@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.training.localization.Philology
 import com.training.skeleton.navigation.Screen
 
 @Composable
@@ -34,7 +35,7 @@ fun BottomBar(bottomNavigationScreens: List<BottomNavigationScreens>, navControl
                 icon = {
                     Icon(bottomNavigationScreens.icon,bottomNavigationScreens.route)
                        },
-                label = { Text(stringResource(id = bottomNavigationScreens.resourceId)) },
+                label = { Text(Philology.getString(id = bottomNavigationScreens.resourceId)) },
             )
         }
 

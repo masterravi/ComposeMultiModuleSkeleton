@@ -1,4 +1,4 @@
-package com.training.trainingmodule.localization.utilities
+package com.training.localization.utilities
 
 import android.content.Context
 import android.util.Log

@@ -1,5 +1,6 @@
-package com.training.trainingmodule.localization.di
+package com.training.localization.di
 
+import android.content.Context
 import com.training.datastore.dao.LanguageDao
 import com.training.localization.repository.LanguageRepositoryImpl
 import com.training.network.NetworkService
@@ -19,12 +20,14 @@ object DatabaseModule {
     fun provideLanguageRepository(
         languageDao: LanguageDao,
         dispatcherProvider: DispatcherProvider,
-        networkService: NetworkService
+        networkService: NetworkService,
+        @ApplicationContext appContext: Context
     ): LanguageRepositoryImpl {
         return LanguageRepositoryImpl(
             languageDao = languageDao,
             dispatcherProvider = dispatcherProvider,
-            networkService = networkService
+            networkService = networkService,
+            applicationContext = appContext
         )
     }
 

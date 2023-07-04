@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.training.datastore.entity.LanguageEntity
+import com.training.datastore.preferences.PreferenceConstants
+import com.training.datastore.preferences.PreferenceStorage
 import com.training.localization.repository.LanguageRepositoryImpl
-import com.training.trainingmodule.localization.utilities.LangConstants
-import com.training.trainingmodule.localization.utilities.LocalizationLogger
+import com.training.localization.utilities.LocalizationConstants
+import com.training.localization.utilities.LocalizationLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +26,7 @@ class Philology @Inject constructor(
     private val baseUrl: String,
     val repository: LanguageRepositoryImpl,
     private val localLanguageFileName: String,
+    private val preferenceStorage: PreferenceStorage,
     @ApplicationContext val applicationContext: Context,
 ) {
 
@@ -162,6 +165,51 @@ class Philology @Inject constructor(
     val coroutineScope: CoroutineScope = CoroutineScope(context)
 
     init {
+
+        coroutineScope.launch {
+            preferenceStorage.getFlowValue(
+                PreferenceConstants.KEY_PREF_APP_LANGUAGE,
+                LocalizationConstants.DEFAULT_APP_LANGUAGE
+            ).collect {
+                currentLanguage.postValue(it)
+
+                if (languageEntity.value?.languageName != it) {
+
+                    val languageData = repository.getLanguageFileFromDB(it)
+
+                    when {
+                        languageData.isEmpty() && it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+                            val response =
+                                repository.getLanguageFileFromServer(
+                                    it, "1.0.0"
+                                )
+                            if (response) {
+                                languageEntity.postValue(
+                                    repository.getLanguageFileFromDB(
+                                        it
+                                    )[0]
+                                )
+                            }
+                        }
+                        it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+                            languageEntity.postValue(languageData[0])
+                        }
+                        else -> {
+                            if (languageData.isEmpty()) {
+                                repository.getLanguageFileFromServer(
+                                    it,
+                                    "1.0.0"
+                                )
+                            } else if (languageData.isNotEmpty()) {
+                                languageEntity.postValue(languageData[0])
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 val langJsonString = getLocalizationData(applicationContext, localLanguageFileName)
@@ -198,55 +246,76 @@ class Philology @Inject constructor(
 
         var result = true
 
-        val languageData = repository.getLanguageFileFromDB(language)
-
-        when {
-            languageData.isEmpty() && language != LangConstants.DEFAULT_APP_LANGUAGE -> {
-                val response =
-                    repository.getLanguageFileFromServer(
-                        language,
-                        fileVersion ?: "1.0.0"
-                    )
-                result = response
-                if (response) {
-                    languageEntity.postValue(
-                        repository.getLanguageFileFromDB(
-                            language
-                        )[0]
-                    )
-                }
-            }
-            languageData.isNotEmpty() && language != LangConstants.DEFAULT_APP_LANGUAGE && fileVersion != languageData[0].versionName -> {
-                val response =
-                    repository.getLanguageFileFromServer(
-                        language,
-                        fileVersion ?: "1.0.0"
-                    )
-                if (response) {
-                    languageEntity.postValue(
-                        repository.getLanguageFileFromDB(
-                            language
-                        )[0]
-                    )
-                }
-            }
-            language != LangConstants.DEFAULT_APP_LANGUAGE -> {
-                languageEntity.postValue(languageData.get(0))
-            }
-            language == LangConstants.DEFAULT_APP_LANGUAGE -> {
-                if (languageData.isNotEmpty() && fileVersion != languageData[0].versionName) {
-                    val response = repository.getLanguageFileFromServer(
-                        language,
-                        fileVersion ?: "1.0.0"
-                    )
-                } else if (languageData.isEmpty()) {
-                    repository.getLanguageFileFromServer(
-                        language,
-                        fileVersion ?: "1.0.0"
-                    )
-                }
-            }
+        /**
+        *  Downloading latest language file form server
+        * */
+        val response =
+            repository.getLanguageFileFromServer(
+                language,
+                fileVersion ?: "1.0.0"
+            )
+        result = response
+        if (response) {
+            languageEntity.postValue(
+                repository.getLanguageFileFromDB(
+                    language
+                )[0]
+            )
         }
+
+//        val languageData = repository.getLanguageFileFromDB(language)
+//        when {
+//            languageData.isEmpty() && language != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+//                val response =
+//                    repository.getLanguageFileFromServer(
+//                        language,
+//                        fileVersion ?: "1.0.0"
+//                    )
+//                result = response
+//                if (response) {
+//                    languageEntity.postValue(
+//                        repository.getLanguageFileFromDB(
+//                            language
+//                        )[0]
+//                    )
+//                }
+//            }
+//            languageData.isNotEmpty() && language != LocalizationConstants.DEFAULT_APP_LANGUAGE && fileVersion != languageData[0].versionName -> {
+//                val response =
+//                    repository.getLanguageFileFromServer(
+//                        language,
+//                        fileVersion ?: "1.0.0"
+//                    )
+//                result = response
+//                if (response) {
+//                    languageEntity.postValue(
+//                        repository.getLanguageFileFromDB(
+//                            language
+//                        )[0]
+//                    )
+//                }
+//            }
+//            language != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+//                languageEntity.postValue(languageData.get(0))
+//                result = true
+//            }
+//            language == LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+//                if (languageData.isNotEmpty() && fileVersion != languageData[0].versionName) {
+//                    val response = repository.getLanguageFileFromServer(
+//                        language,
+//                        fileVersion ?: "1.0.0"
+//                    )
+//                    result = response
+//                } else if (languageData.isEmpty()) {
+//                    repository.getLanguageFileFromServer(
+//                        language,
+//                        fileVersion ?: "1.0.0"
+//                    )
+//                }
+//            }
+//        }
+
+        preferenceStorage.setValue(PreferenceConstants.KEY_PREF_APP_LANGUAGE,language)
         return result
     }
 
@@ -260,7 +329,7 @@ class Philology @Inject constructor(
                     language,
                     fileVersion
                 )
-            if(response && language!=LangConstants.DEFAULT_APP_LANGUAGE){
+            if(response && language!= LocalizationConstants.DEFAULT_APP_LANGUAGE){
                 languageEntity.postValue(
                     repository.getLanguageFileFromDB(
                         language

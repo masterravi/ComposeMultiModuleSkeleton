@@ -9,8 +9,8 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.training.datastore.dao.LanguageDao
 import com.training.datastore.dao.ProductDao
-import com.training.datastore.entity.ProductEntity
 import com.training.datastore.entity.LanguageEntity
+import com.training.datastore.entity.ProductEntity
 
 @Database(
     entities = [ProductEntity::class, LanguageEntity::class],
