@@ -9,7 +9,7 @@ import com.training.datastore.entity.LanguageEntity
 import com.training.datastore.preferences.PreferenceConstants
 import com.training.datastore.preferences.PreferenceStorage
 import com.training.localization.repository.LanguageRepositoryImpl
-import com.training.localization.utilities.LocalizationConstants
+import com.training.localization.utilities.LangConstants
 import com.training.localization.utilities.LocalizationLogger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
@@ -169,7 +169,7 @@ class Philology @Inject constructor(
         coroutineScope.launch {
             preferenceStorage.getFlowValue(
                 PreferenceConstants.KEY_PREF_APP_LANGUAGE,
-                LocalizationConstants.DEFAULT_APP_LANGUAGE
+                LangConstants.DEFAULT_APP_LANGUAGE
             ).collect {
                 currentLanguage.postValue(it)
 
@@ -178,7 +178,7 @@ class Philology @Inject constructor(
                     val languageData = repository.getLanguageFileFromDB(it)
 
                     when {
-                        languageData.isEmpty() && it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+                        languageData.isEmpty() && it != LangConstants.DEFAULT_APP_LANGUAGE -> {
                             val response =
                                 repository.getLanguageFileFromServer(
                                     it, "1.0.0"
@@ -191,7 +191,7 @@ class Philology @Inject constructor(
                                 )
                             }
                         }
-                        it != LocalizationConstants.DEFAULT_APP_LANGUAGE -> {
+                        it != LangConstants.DEFAULT_APP_LANGUAGE -> {
                             languageEntity.postValue(languageData[0])
                         }
                         else -> {
@@ -329,7 +329,7 @@ class Philology @Inject constructor(
                     language,
                     fileVersion
                 )
-            if(response && language!= LocalizationConstants.DEFAULT_APP_LANGUAGE){
+            if(response && language!= LangConstants.DEFAULT_APP_LANGUAGE){
                 languageEntity.postValue(
                     repository.getLanguageFileFromDB(
                         language

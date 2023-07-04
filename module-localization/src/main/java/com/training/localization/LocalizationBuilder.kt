@@ -5,8 +5,8 @@ import com.training.datastore.AppDatabase
 import com.training.datastore.preferences.PreferenceConstants
 import com.training.datastore.preferences.PreferenceStorageImpl
 import com.training.localization.repository.LanguageRepositoryImpl
+import com.training.localization.utilities.LangConstants
 import com.training.trainingmodule.localization.utilities.DispatcherProvider
-import com.training.localization.utilities.LocalizationConstants
 import com.training.network.NetworkClient
 import com.training.network.NetworkService
 import kotlinx.coroutines.flow.flow
@@ -30,7 +30,7 @@ class LocalizationBuilder(
         fun getCurrentLanguage() = flow {
             preferenceStorage?.getFlowValue(
                 PreferenceConstants.KEY_PREF_APP_LANGUAGE,
-                LocalizationConstants.DEFAULT_APP_LANGUAGE
+                LangConstants.DEFAULT_APP_LANGUAGE
             )
                 ?.onEach {
                     emit(it)
